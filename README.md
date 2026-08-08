@@ -1,16 +1,27 @@
-# Flight Delay Data Engineering Pipeline
+# ✈️ Flight Delay Data Engineering Pipeline
 
 ## Overview
 
-This project demonstrates an end-to-end data engineering and analytics pipeline built using **Azure Databricks, PySpark, Apache Airflow, Delta Lake, and Power BI**.
+This project demonstrates an **end-to-end cloud data engineering and
+analytics pipeline** for U.S. airline flight-performance data.
 
-U.S. airline on-time performance data from the Bureau of Transportation Statistics (BTS) TranStats dataset is ingested and transformed through a medallion-style data architecture. Apache Airflow orchestrates the Databricks workload through the Databricks Jobs API, while curated Gold-layer datasets support an interactive Power BI dashboard.
+Flight data from the **U.S. Department of Transportation Bureau of
+Transportation Statistics (BTS) TranStats** dataset is stored in **Azure
+Data Lake Storage** and processed using **Azure Databricks and PySpark**
+through a Bronze, Silver, and Gold medallion architecture.
 
-The project demonstrates the complete flow from raw transportation data to analytics-ready business insights.
+**Apache Airflow**, running locally through Docker, orchestrates the
+Databricks workflow through the Databricks Jobs API. Automated
+data-quality checks validate the analytical datasets before they are
+consumed by **Power BI**.
+
+The project also implements **GitHub Actions CI/CD**, providing
+automated code validation and deployment of version-controlled
+Databricks source files.
 
 ## Architecture
 
-```text
+``` text
 BTS TranStats
       |
       v
@@ -19,142 +30,325 @@ Azure Data Lake Storage
       v
 Azure Databricks / PySpark
       |
-      +--> Bronze / Raw
+      +--> Bronze Layer
+      |      Raw Flight Data
       |
-      +--> Silver / Cleaned
+      +--> Silver Layer
+      |      Cleaned & Standardized Data
       |
-      +--> Gold / Aggregated
+      +--> Gold Layer
+      |      Analytics Aggregations
+      |
+      +--> Data Quality Validation
       |
       v
 Power BI Dashboard
 
-Apache Airflow
+Apache Airflow (Docker)
       |
-      +---- Databricks Jobs API ----> Databricks Pipeline
+      +---- Databricks Jobs API ----> Databricks Workflow
+
+GitHub Repository
+      |
+      +---- GitHub Actions CI
+      |
+      +---- GitHub Actions CD ----> Databricks Workspace
 ```
 
 ## Technology Stack
 
-| Technology              | Purpose                                |
-| ----------------------- | -------------------------------------- |
-| Python                  | Pipeline development                   |
-| PySpark                 | Distributed data transformation        |
-| Azure Databricks        | Data processing and compute            |
-| Delta Lake              | Structured Silver and Gold data layers |
-| Azure Data Lake Storage | Cloud data storage                     |
-| Apache Airflow          | Pipeline orchestration                 |
-| Databricks Jobs API     | Airflow-to-Databricks integration      |
-| Docker                  | Local Airflow environment              |
-| Power BI                | Data modeling and visualization        |
-| GitHub                  | Source control and CI/CD               |
+  -----------------------------------------------------------------------
+  Technology                          Purpose
+  ----------------------------------- -----------------------------------
+  **Python**                          Pipeline development and automation
 
-## Pipeline
+  **PySpark**                         Distributed data transformation
 
-### Data Ingestion
+  **Azure Databricks**                Cloud data processing and workflow
+                                      execution
 
-Flight-performance data is sourced from the U.S. Department of Transportation Bureau of Transportation Statistics TranStats dataset.
+  **Delta Lake**                      Structured Bronze, Silver, and Gold
+                                      data layers
 
-Raw flight records are ingested into the Azure/Databricks environment for downstream processing.
+  **Azure Data Lake Storage**         Cloud storage for source flight
+                                      data
 
-### Silver Layer
+  **Apache Airflow**                  Pipeline orchestration
 
-PySpark transformations clean and standardize the raw flight data.
+  **Databricks Jobs API**             Airflow-to-Databricks integration
 
-Processing includes tasks such as:
+  **Docker**                          Local Airflow container environment
 
-* Data type standardization
-* Null handling
-* Flight status preparation
-* Delay calculations
-* Origin and destination preparation
-* Cancellation indicators
-* Date transformations
-* Data-quality filtering
+  **GitHub**                          Source control
 
-The resulting Silver layer provides clean, analysis-ready flight-level data.
+  **GitHub Actions**                  Continuous Integration and
+                                      Continuous Deployment
 
-### Gold Layer
+  **Power BI**                        Data modeling, analytics, and
+                                      visualization
+  -----------------------------------------------------------------------
 
-Gold datasets provide aggregated metrics optimized for reporting and analytics.
+## Data Pipeline
 
-Examples include:
+### 1. Bronze Layer --- Data Ingestion
 
-* Airport performance
-* Route performance
-* Average arrival delay
-* Average departure delay
-* Delay rates
-* Cancellation rates
-* Flight volumes
-* Time-based flight performance
+Flight-performance data originates from the BTS TranStats On-Time
+Performance dataset.
 
-These datasets serve as the primary source for the Power BI reporting layer.
+Raw source data is stored in **Azure Data Lake Storage** and ingested
+into the Databricks Bronze layer. The Bronze layer preserves the source
+data before downstream business transformations are applied.
 
-## Airflow Orchestration
+### 2. Silver Layer --- Data Transformation
 
-Apache Airflow runs locally through Docker and serves as the orchestration layer for the pipeline.
+The Silver layer uses **PySpark** to clean and standardize raw flight
+records.
 
-Airflow communicates with Azure Databricks through the **Databricks Jobs API** using the Apache Airflow Databricks provider.
+Transformations include:
 
-The Airflow DAG can trigger an existing Databricks job and monitor its execution through completion.
+-   Data type standardization
+-   Null handling
+-   Date transformations
+-   Flight-status preparation
+-   Departure and arrival delay calculations
+-   Cancellation indicators
+-   Origin and destination preparation
+-   Data-quality filtering
+-   Analytical field preparation
 
-This provides:
+The resulting Silver dataset provides standardized flight-level records
+for downstream analysis.
 
-* Centralized pipeline orchestration
-* Job monitoring
-* Retry capabilities
-* Execution logging
-* Dependency management
-* Future scheduling capabilities
+### 3. Gold Layer --- Analytics Aggregations
+
+The Gold layer transforms cleaned Silver data into aggregated datasets
+optimized for reporting and analytics.
+
+Gold datasets support metrics including:
+
+-   Total flights
+-   Airport performance
+-   Route performance
+-   Average departure delay
+-   Average arrival delay
+-   Delay rates
+-   Cancellation rates
+-   Flight volume
+-   Daily and weekly flight performance
+
+These curated datasets serve as the primary reporting layer for Power
+BI.
+
+## Data Quality Validation
+
+Automated data-quality checks validate Gold-layer datasets before
+downstream reporting.
+
+Validation includes checks for:
+
+-   Missing required columns
+-   Null values in critical fields
+-   Invalid calculated metrics
+-   Unexpected record counts
+-   Invalid percentages or rates
+-   Aggregation consistency
+
+The pipeline follows:
+
+``` text
+Bronze
+   |
+   v
+Silver
+   |
+   v
+Gold
+   |
+   v
+Data Quality Validation
+   |
+   v
+Power BI
+```
+
+## Databricks Workflow
+
+Azure Databricks provides the primary cloud compute environment for the
+pipeline. Workflow tasks execute in dependency order:
+
+``` text
+Bronze Ingestion
+       |
+       v
+Silver Transformation
+       |
+       v
+Gold Aggregations
+       |
+       v
+Data Quality Checks
+```
+
+### Databricks Job Task Order
+
+![Databricks Job Task Order](images/Order%20of%20Job%20Tasks.PNG)
+
+## Apache Airflow Orchestration
+
+**Apache Airflow** serves as the external orchestration layer. Airflow
+runs locally inside Docker and communicates with Azure Databricks using
+the **Databricks Jobs API** and Apache Airflow's Databricks provider.
+
+Airflow provides centralized orchestration, dependency management,
+pipeline monitoring, execution logging, retries, failure visibility, and
+scheduling capabilities.
+
+### Airflow DAG
+
+![Flight Delay Airflow
+Pipeline](images/Flight-Delay-Pipeline%20Airflow.PNG)
+
+### Successful End-to-End Airflow Test
+
+The complete Databricks pipeline was successfully triggered and
+monitored through Airflow.
+
+![Successful Airflow Pipeline
+Run](images/Flight%20Delay%20Pipeline%20Airflow%20Run%20Test.PNG)
+
+## CI/CD Automation
+
+The project implements **Continuous Integration and Continuous
+Deployment using GitHub Actions**.
+
+### Continuous Integration
+
+The CI workflow validates pipeline source code when changes are pushed
+to the repository, providing an automated checkpoint before deployment.
+
+### Continuous Deployment
+
+The CD workflow authenticates to Azure Databricks using securely stored
+GitHub repository secrets and deploys version-controlled Databricks
+source files to the configured workspace location.
+
+``` text
+Local Development
+       |
+       v
+Git Commit
+       |
+       v
+GitHub Repository
+       |
+       v
+GitHub Actions CI
+       |
+       v
+GitHub Actions CD
+       |
+       v
+Databricks Workspace
+```
+
+### Successful CI/CD Execution
+
+![GitHub Actions CI-CD](images/GitHub%20Actions%20CI-CD.PNG)
+
+## Power BI Integration
+
+The Gold datasets produced by Databricks serve as the reporting layer
+for **Power BI**.
+
+### Azure Databricks Connection
+
+![Azure Databricks Power BI
+Connection](images/Azure%20Databricks%20Power%20BI%20Connection.PNG)
+
+![Azure Databricks
+Connection](images/Connection%20Azure%20Databricks.PNG)
+
+### Authentication Configuration
+
+Authentication is configured without exposing credential values in
+source control.
+
+![Power BI Authentication
+Configuration](images/Generated%20Token%20for%20Power%20BI%20Connection.PNG)
+
+> **Security Note:** Authentication secrets and token values are not
+> stored in the repository.
 
 ## Power BI Dashboard
 
-The Power BI dashboard provides an interactive view of airline and airport performance.
+The final Power BI dashboard provides an interactive analytical view of
+U.S. flight performance, including:
 
-Dashboard functionality includes:
+-   Total flight volume
+-   Average departure delay
+-   Average arrival delay
+-   Departure delay rate
+-   Cancellation rate
+-   Airport performance
+-   Route performance
+-   Worst-performing routes
+-   Weekly and daily trends
+-   Interactive filtering, drill-down, and tooltips
 
-* Total flight KPIs
-* Arrival and departure delay analysis
-* Delay rate analysis
-* Cancellation rate analysis
-* Airport performance
-* Route performance
-* Worst-performing routes
-* Weekly and daily drill-down
-* Interactive filtering and tooltips
+### Flight Delay Overview
 
-Additional Power BI documentation is available in the `powerbi/` directory.
+![Power BI Flight Delay
+Dashboard](images/Power%20BI%20Dashboard%20Flight%20Delay%20Overview.PNG)
 
 ## Repository Structure
 
-```text
+``` text
 Flight_Delay_Pipeline/
-|
-|-- dags/
-|   `-- flight_delay_pipeline.py
-|
-|-- powerbi/
-|   |-- README.md
-|   `-- Flight Delay Dashboard.pbix
 |
 |-- .github/
 |   `-- workflows/
-|       `-- ci.yml
+|       |-- ci.yml
+|       `-- cd.yml
+|
+|-- airflow/
+|   `-- dags/
+|       `-- flight_delay_pipeline.py
+|
+|-- databricks/
+|   |-- 01_bronze_ingestion.py
+|   |-- 02_silver_transform.py
+|   |-- 03_gold_aggregations.py
+|   `-- data_quality_checks.py
+|
+|-- images/
+|   |-- Azure Databricks Power BI Connection.PNG
+|   |-- Connection Azure Databricks.PNG
+|   |-- Flight Delay Pipeline Airflow Run Test.PNG
+|   |-- Flight-Delay-Pipeline Airflow.PNG
+|   |-- Generated Token for Power BI Connection.PNG
+|   |-- GitHub Actions CI-CD.PNG
+|   |-- Order of Job Tasks.PNG
+|   `-- Power BI Dashboard Flight Delay Overview.PNG
+|
+|-- powerbi/
+|   |-- README.md
+|   `-- Flight-Delay.pbix
 |
 |-- .gitignore
-|-- requirements.txt
-|-- docker-compose.yml
 |-- Dockerfile
+|-- docker-compose.yml
+|-- requirements.txt
 `-- README.md
 ```
 
 ## Security
 
-Credentials and environment-specific configuration are excluded from source control.
+Credentials and environment-specific configuration are excluded from
+source control.
 
-The repository's `.gitignore` prevents files such as the following from being committed:
+The project's `.gitignore` prevents sensitive files such as:
 
-```text
+``` text
 .env
 *.env
 .databrickscfg
@@ -162,57 +356,131 @@ The repository's `.gitignore` prevents files such as the following from being co
 *.pem
 ```
 
-Databricks authentication credentials are managed through Airflow connections rather than hard-coded into DAG files.
+Databricks credentials are not hard-coded into pipeline source files.
+Airflow uses configured Databricks connections for orchestration, while
+GitHub Actions uses repository secrets for deployment authentication.
 
-## Running Airflow
+## Running Airflow Locally
 
-Start the local Airflow environment with:
+Start the environment:
 
-```bash
+``` bash
 docker compose up -d
 ```
 
 Verify the containers:
 
-```bash
+``` bash
 docker compose ps
 ```
 
-The Flight Delay DAG can then be triggered through the Airflow web interface.
+Trigger the Flight Delay DAG through the Airflow web interface. Airflow
+then communicates with Azure Databricks and triggers the configured
+workflow through the Jobs API.
 
-Airflow authenticates to Databricks and triggers the configured Databricks job through the Jobs API.
+Stop the environment with:
 
-To stop the local environment:
-
-```bash
+``` bash
 docker compose down
 ```
 
-## CI/CD
+## Development and Deployment Workflow
 
-GitHub Actions is used to introduce automated CI/CD practices to the project.
-
-The CI workflow validates pipeline code when changes are pushed to the repository. Additional automated testing and deployment capabilities can be incorporated as the project evolves.
-
-## Future Improvements
-
-Potential enhancements include:
-
-* Separate Airflow tasks for ingestion, Silver, and Gold processing
-* Automated data-quality validation
-* Idempotent incremental ingestion
-* Monthly TranStats ingestion
-* Automated Power BI refresh
-* Expanded unit and integration testing
-* Automated Databricks deployment
-* Pipeline failure notifications
+``` text
+Modify Pipeline Code
+        |
+        v
+Local Validation
+        |
+        v
+git add .
+        |
+        v
+git commit
+        |
+        v
+git push
+        |
+        v
+GitHub Actions CI
+        |
+        v
+GitHub Actions CD
+        |
+        v
+Databricks Workspace
+        |
+        v
+Airflow End-to-End Test
+```
 
 ## Data Source
 
-**U.S. Department of Transportation — Bureau of Transportation Statistics**
+**U.S. Department of Transportation --- Bureau of Transportation
+Statistics (BTS)**
 
-TranStats On-Time Performance data provides information about U.S. airline operations, delays, cancellations, airports, carriers, and routes.
+The project uses TranStats On-Time Performance data containing
+information about U.S. airline operations, flights, airports, routes,
+delays, and cancellations.
+
+## Future Improvements
+
+Potential future enhancements include:
+
+-   Automated monthly TranStats ingestion
+-   Incremental ingestion instead of full-load processing
+-   Automated Power BI dataset refresh
+-   Additional PySpark unit and integration testing
+-   Airflow failure notifications
+-   Pipeline SLA monitoring
+-   Data-quality anomaly detection
+-   Infrastructure as Code for Azure resources
+
+## Key Engineering Concepts Demonstrated
+
+-   ETL / ELT pipeline development
+-   Medallion architecture
+-   Cloud data lakes
+-   Distributed PySpark processing
+-   Delta Lake
+-   Data transformation and aggregation
+-   Data-quality validation
+-   Workflow orchestration
+-   Databricks Jobs API integration
+-   Docker containerization
+-   CI/CD
+-   Git source control
+-   Secure credential management
+-   Cloud-to-BI integration
+-   Analytical data modeling
+-   Business intelligence
 
 ## Project Goal
 
-The goal of this project is to demonstrate the design and implementation of a modern cloud-based data pipeline that combines **data engineering, orchestration, cloud processing, analytics, and visualization** in a single end-to-end solution.
+The goal of this project is to demonstrate the design and implementation
+of a **production-style cloud data engineering pipeline** that moves
+data through the complete analytical lifecycle:
+
+``` text
+Source Data
+     ↓
+Cloud Storage
+     ↓
+Distributed Processing
+     ↓
+Medallion Architecture
+     ↓
+Data Quality
+     ↓
+Workflow Orchestration
+     ↓
+CI/CD
+     ↓
+Analytics
+     ↓
+Business Intelligence
+```
+
+The project demonstrates how raw public transportation data can be
+transformed into a validated, automated, analytics-ready solution using
+modern cloud data engineering practices.
