@@ -94,8 +94,10 @@ print(csv_path)
 # 4. Save the raw CSV directly into Azure Data Lake
 
 raw_dir = (
-    "abfss://flight-data@flightdelay.dfs.core.windows.net/"
-    "raw/transtats/2026/05"
+    "/Volumes/flight_delay_databricks/"
+    "flight_delay/"
+    "transtats_files/"
+    "data/raw/2026_05"
 )
 
 raw_csv_path = (
@@ -192,3 +194,7 @@ print(
 bronze_df = spark.table(
     "`flight-delay_databricks`.flight_delay.bronze_flights"
 )
+
+# COMMAND ----------
+
+display(dbutils.fs.ls(raw_dir))

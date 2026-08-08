@@ -1,5 +1,5 @@
-FROM apache/airflow:3.3.0
+FROM apache/airflow:2.10.5
 
 RUN python -m pip install --no-cache-dir \
-    "apache-airflow==3.3.0" \
-    apache-airflow-providers-databricks
+    "apache-airflow==2.10.5" \
+    "apache-airflow-providers-databricks==7.4.0"

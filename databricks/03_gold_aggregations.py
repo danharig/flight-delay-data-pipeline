@@ -23,8 +23,8 @@ gold_summary = (
         F.sum("IsArrivalDelayed").alias("DelayedFlights"),
         F.sum("IsCancelled").alias("CancelledFlights"),
         F.sum("IsDiverted").alias("DivertedFlights"),
-        F.avg("ArrDelayMinutes").alias("AvgArrivalDelayMinutes"),
-        F.avg("DepDelayMinutes").alias("AvgDepartureDelayMinutes")
+        F.avg("ArrDelayMinutes").alias("AvgArrivalDelay"),
+        F.avg("DepDelayMinutes").alias("AvgDepartureDelay")
     )
     .withColumn(
         "DelayRatePct",
@@ -100,7 +100,7 @@ gold_airport = (
         F.round(
             F.avg("DepDelayMinutes"),
             2
-        ).alias("AvgDepartureDelayMinutes")
+        ).alias("AvgDepartureDelay")
     )
     .withColumn(
         "DepartureDelayRatePct",
@@ -240,11 +240,11 @@ gold_daily = (
 
         F.round(
             F.avg("ArrDelayMinutes"), 2
-        ).alias("AvgArrivalDelayMinutes"),
+        ).alias("AvgArrivalDelay"),
 
         F.round(
             F.avg("DepDelayMinutes"), 2
-        ).alias("AvgDepartureDelayMinutes")
+        ).alias("AvgDepartureDelay")
     )
     .withColumn(
         "DelayRatePct",

@@ -38,3 +38,7 @@ jobs:
           python -m py_compile databricks/02_silver_transform.py
           python -m py_compile databricks/03_gold_aggregations.py
           python -m py_compile databricks/04_data_quality_checks.py
+
+       - name: Run tests
+         run: python -m pytest tests -v
+      
