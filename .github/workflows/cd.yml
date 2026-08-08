@@ -28,6 +28,27 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: databricks auth describe
 
+      # Remove old duplicate Databricks subfolder if it exists
+      - name: Clean duplicate Databricks folder
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          databricks workspace delete \
+            "/Workspace/Users/email/flight_delay_cicd/databricks" \
+            --recursive || true
+
+      # Remove stale src contents before redeploying shared code
+      - name: Clean shared src folder
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          databricks workspace delete \
+            "/Workspace/Users/email/flight_delay_cicd/src" \
+            --recursive || true
+
+      # Deploy pipeline notebooks to the existing root location
       - name: Deploy Databricks scripts
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
@@ -35,9 +56,10 @@ jobs:
         run: |
           databricks workspace import-dir \
             databricks \
-            "/Workspace/Users/danharig98@gmail.com/flight_delay_cicd/databricks" \
+            "/Workspace/Users/email/flight_delay_cicd" \
             --overwrite
 
+      # Deploy only reusable transformation code into src
       - name: Deploy shared transformation code
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
@@ -45,5 +67,5 @@ jobs:
         run: |
           databricks workspace import-dir \
             src \
-            "/Workspace/Users/danharig98@gmail.com/flight_delay_cicd/src" \
+            "/Workspace/Users/email/flight_delay_cicd/src" \
             --overwrite
