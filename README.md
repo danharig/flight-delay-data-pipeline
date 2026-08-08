@@ -83,9 +83,10 @@ GitHub Repository
 
   **GitHub Actions**                  Continuous Integration and
                                       Continuous Deployment
+  
+  **Power BI**                        Visualization, DAX, Analytics, 
+                                      KPI development, Drill-Down Analysis, Dashboard Presentation
 
-  **Power BI**                        Data modeling, analytics, and
-                                      visualization
   -----------------------------------------------------------------------
 
 ## Data Pipeline
