@@ -1,14 +1,14 @@
-import pytest
 import os
+import pytest
 from pyspark.sql import SparkSession
 
 
 @pytest.fixture(scope="session")
 def spark():
-     os.environ["PYSPARK_PYTHON"] = "python"
-     os.environ["PYSPARK_DRIVER_PYTHON"] = "python"
+    os.environ["PYSPARK_PYTHON"] = "python"
+    os.environ["PYSPARK_DRIVER_PYTHON"] = "python"
 
-     spark = (
+    spark = (
         SparkSession.builder
         .master("local[2]")
         .appName("flight-delay-unit-tests")
