@@ -35,7 +35,7 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
           databricks workspace delete \
-            "/Workspace/Users/email/flight_delay_cicd/databricks" \
+            "/Workspace/Users/danharig98@gmail.com/flight_delay_cicd/databricks" \
             --recursive || true
 
       # Remove stale src contents before redeploying shared code
@@ -45,7 +45,7 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
           databricks workspace delete \
-            "/Workspace/Users/email/flight_delay_cicd/src" \
+            "/Workspace/Users/danharig98@gmail.com/flight_delay_cicd/src" \
             --recursive || true
 
       # Deploy pipeline notebooks to the existing root location
@@ -56,7 +56,7 @@ jobs:
         run: |
           databricks workspace import-dir \
             databricks \
-            "/Workspace/Users/email/flight_delay_cicd" \
+            "/Workspace/Users/danharig98@gmail.com/flight_delay_cicd" \
             --overwrite
 
       # Deploy only reusable transformation code into src
@@ -67,5 +67,5 @@ jobs:
         run: |
           databricks workspace import-dir \
             src \
-            "/Workspace/Users/email/flight_delay_cicd/src" \
+            "/Workspace/Users/danharig98@gmail.com/flight_delay_cicd/src" \
             --overwrite
