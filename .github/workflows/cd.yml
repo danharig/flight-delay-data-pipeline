@@ -34,5 +34,5 @@ jobs:
         run: |
           databricks workspace import-dir \
             databricks \
-            "/Workspace/Users/danharig98@gmail.com" \
+            "/Workspace/Users/danharig98@gmail.com/flight_delay_cicd" \
             --overwrite
