@@ -1,3 +1,4 @@
 pytest
+pyspark
 apache-airflow==3.3.0
 apache-airflow-providers-databricks==7.18.0
