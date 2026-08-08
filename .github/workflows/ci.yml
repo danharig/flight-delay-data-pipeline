@@ -27,5 +27,9 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
 
-      - name: Run tests
+      - name: Validate Python syntax
+        run: |
+           python -m compileall airflow databricks src tests
+
+      - name: Run Pyspark Unit Tests
         run: python -m pytest tests -v
