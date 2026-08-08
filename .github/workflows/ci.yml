@@ -36,12 +36,8 @@ jobs:
       - name: Verify PySpark installation
         run: python -c "import pyspark; print(pyspark.__version__)"
 
-      - name: Run PySpark unit tests
-        run: python -m pytest tests -
-
       - name: Validate Python syntax
-        run: |
-           python -m compileall airflow databricks src tests
+        run: python -m compileall databricks src tests
 
       - name: Run PySpark unit tests
         run: python -m pytest tests -v
