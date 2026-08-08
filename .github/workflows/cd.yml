@@ -21,11 +21,11 @@ jobs:
       - name: Set up Databricks CLI
         uses: databricks/setup-cli@main
 
-      - name: Verify Databricks connection
+      - name: Verify Databricks authentication
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-        run: databricks current-user me
+        run: databricks auth describe
 
       - name: Deploy Databricks scripts
         env:
