@@ -1,0 +1,44 @@
+# ==========================================
+# Flight Delay Pipeline - Git Ignore
+# ==========================================
+
+# Secrets / environment variables
+.env
+*.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Airflow
+logs/
+airflow.db
+airflow.cfg
+standalone_admin_password.txt
+
+# Databricks credentials
+.databrickscfg
+
+# Raw / processed datasets
+data/
+*.csv
+*.zip
+*.parquet
+
+# Temporary Power BI files
+*.tmp
+~$*
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
