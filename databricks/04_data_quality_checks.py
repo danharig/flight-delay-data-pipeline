@@ -1,4 +1,3 @@
-# Deployed as a CI/CD Test
 # Databricks notebook source
 # MAGIC %sql SHOW VOLUMES IN flight_delay_databricks.flight_delay
 
