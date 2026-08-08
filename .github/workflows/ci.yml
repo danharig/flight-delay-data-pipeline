@@ -1,0 +1,40 @@
+name: Flight Delay CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Validate Airflow DAG syntax
+        run: |
+          python -m py_compile airflow/dags/flight_delay_pipeline.py
+
+      - name: Validate Databricks Python files
+        run: |
+          python -m py_compile databricks/01_bronze_ingestion.py
+          python -m py_compile databricks/02_silver_transform.py
+          python -m py_compile databricks/03_gold_aggregations.py
+          python -m py_compile databricks/04_data_quality_checks.py
