@@ -254,7 +254,7 @@ Databricks Workspace
 
 ### Successful CI/CD Execution
 
-![GitHub Actions CI-CD](images/CI-CD Pipeline.PNG)
+![GitHub Actions CI-CD](images/CI-CD%Pipeline.PNG)
 
 ## Power BI Integration
 
