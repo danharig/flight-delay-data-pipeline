@@ -8,6 +8,7 @@ on:
       - main
     paths:
       - "databricks/**"
+      - "src/**"
       - ".github/workflows/cd.yml"
 
 jobs:
@@ -34,5 +35,15 @@ jobs:
         run: |
           databricks workspace import-dir \
             databricks \
-            "/Workspace/Users/danharig98@gmail.com/flight_delay_cicd" \
+            "/Workspace/Users/danharig98@gmail.com/flight_delay_cicd/databricks" \
+            --overwrite
+
+      - name: Deploy shared transformation code
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          databricks workspace import-dir \
+            src \
+            "/Workspace/Users/danharig98@gmail.com/flight_delay_cicd/src" \
             --overwrite
