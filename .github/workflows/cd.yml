@@ -33,5 +33,5 @@ jobs:
         run: |
           databricks workspace import-dir \
             databricks \
-            /Workspace/Users/danharig98@gmail.com/01_bronze_ingestion \
+            /Workspace/Users/email \
             --overwrite
