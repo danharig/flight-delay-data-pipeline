@@ -1,4 +1,8 @@
+from pyspark.sql.types import StructType, StructField, StringType
 from src.silver_transformations import transform_silver
+
+
+from pyspark.sql.types import StructType, StructField, StringType
 
 
 def create_test_df(spark):
@@ -38,33 +42,33 @@ def create_test_df(spark):
         )
     ]
 
-    columns = [
-        "Year",
-        "Quarter",
-        "Month",
-        "DayofMonth",
-        "DayOfWeek",
-        "FlightDate",
-        "Reporting_Airline",
-        "Flight_Number_Reporting_Airline",
-        "Origin",
-        "Dest",
-        "DepDelay",
-        "DepDelayMinutes",
-        "ArrDelay",
-        "ArrDelayMinutes",
-        "Cancelled",
-        "CancellationCode",
-        "Diverted",
-        "Distance",
-        "CarrierDelay",
-        "WeatherDelay",
-        "NASDelay",
-        "SecurityDelay",
-        "LateAircraftDelay"
-    ]
+    schema = StructType([
+        StructField("Year", StringType(), True),
+        StructField("Quarter", StringType(), True),
+        StructField("Month", StringType(), True),
+        StructField("DayofMonth", StringType(), True),
+        StructField("DayOfWeek", StringType(), True),
+        StructField("FlightDate", StringType(), True),
+        StructField("Reporting_Airline", StringType(), True),
+        StructField("Flight_Number_Reporting_Airline", StringType(), True),
+        StructField("Origin", StringType(), True),
+        StructField("Dest", StringType(), True),
+        StructField("DepDelay", StringType(), True),
+        StructField("DepDelayMinutes", StringType(), True),
+        StructField("ArrDelay", StringType(), True),
+        StructField("ArrDelayMinutes", StringType(), True),
+        StructField("Cancelled", StringType(), True),
+        StructField("CancellationCode", StringType(), True),
+        StructField("Diverted", StringType(), True),
+        StructField("Distance", StringType(), True),
+        StructField("CarrierDelay", StringType(), True),
+        StructField("WeatherDelay", StringType(), True),
+        StructField("NASDelay", StringType(), True),
+        StructField("SecurityDelay", StringType(), True),
+        StructField("LateAircraftDelay", StringType(), True),
+    ])
 
-    return spark.createDataFrame(data, columns)
+    return spark.createDataFrame(data, schema)
 
 
 def test_departure_delay_flag(spark):
