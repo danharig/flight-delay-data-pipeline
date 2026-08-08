@@ -43,5 +43,5 @@ jobs:
         run: |
            python -m compileall airflow databricks src tests
 
-      - name: Run Pyspark Unit Tests
+      - name: Run Pyspark unit tests
         run: python -m pytest tests -v
