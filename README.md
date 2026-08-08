@@ -60,32 +60,32 @@ GitHub Repository
   -----------------------------------------------------------------------
   Technology                          Purpose
   ----------------------------------- -----------------------------------
-  **Python**                          Pipeline development and automation
+  **Python**                          Pipeline Development and Automation
 
-  **PySpark**                         Distributed data transformation
+  **PySpark**                         Distributed Data Transformation
 
-  **Azure Databricks**                Cloud data processing and workflow
-                                      execution
+  **Azure Databricks**                Cloud Data Processing and Workflow
+                                      Execution
 
   **Delta Lake**                      Structured Bronze, Silver, and Gold
-                                      data layers
+                                      Data Layers
 
-  **Azure Data Lake Storage**         Cloud storage for source flight
-                                      data
+  **Azure Data Lake Storage**         Cloud Storage for Source Flight
+                                      Data
 
-  **Apache Airflow**                  Pipeline orchestration
+  **Apache Airflow**                  Pipeline Orchestration
 
-  **Databricks Jobs API**             Airflow-to-Databricks integration
+  **Databricks Jobs API**             Airflow-to-Databricks Integration
 
-  **Docker**                          Local Airflow container environment
+  **Docker**                          Local Airflow Container Environment
 
-  **GitHub**                          Source control
+  **GitHub**                          Source Control
 
   **GitHub Actions**                  Continuous Integration and
                                       Continuous Deployment
   
   **Power BI**                        Visualization, DAX, Analytics, 
-                                      KPI development, Drill-Down Analysis, Dashboard Presentation
+                                      KPI Development, Drill-Down analysis, Dashboard Presentation
 
   -----------------------------------------------------------------------
 
