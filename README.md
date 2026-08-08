@@ -220,7 +220,9 @@ Run](images/Flight%20Delay%20Pipeline%20Airflow%20Run%20Test.PNG)
 ## CI/CD Automation
 
 Both CI validation and Databricks deployment execute successfully against the `main` branch. 
-(README.md, airflow, databricks, powerbi, github/workflows)
+The purpose is to catch problems before bad code gets deployed.
+That's the green CI run shown below on your GitHub Actions screen.
+main branch: (README.md, airflow, databricks, powerbi, github/workflows, images)
 
 ![GitHub Actions CI/CD](images/CI-CD%20Pipeline.PNG)
 
