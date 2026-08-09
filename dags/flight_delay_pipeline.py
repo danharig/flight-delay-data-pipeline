@@ -34,7 +34,7 @@ with DAG(
 ) as dag:
 
     # ---------------------------------------------------------------
-    # Environment setup / pipeline start
+    # Pipeline start
     # ---------------------------------------------------------------
 
     environment_setup = EmptyOperator(
@@ -42,65 +42,18 @@ with DAG(
     )
 
     # ---------------------------------------------------------------
-    # Bronze ingestion
+    # Trigger full Databricks workflow
     # ---------------------------------------------------------------
 
-    bronze_ingestion = DatabricksRunNowOperator(
-        task_id="bronze_ingestion",
+    run_databricks_pipeline = DatabricksRunNowOperator(
+        task_id="run_databricks_pipeline",
         databricks_conn_id="databricks_default",
         job_id=DATABRICKS_JOB_ID,
-        notebook_params={
-            "task": "bronze",
-        },
     )
 
     # ---------------------------------------------------------------
-    # Silver transformation
+    # Dependency order
     # ---------------------------------------------------------------
 
-    silver_transform = DatabricksRunNowOperator(
-        task_id="silver_transform",
-        databricks_conn_id="databricks_default",
-        job_id=DATABRICKS_JOB_ID,
-        notebook_params={
-            "task": "silver",
-        },
-    )
+    environment_setup >> run_databricks_pipeline
 
-    # ---------------------------------------------------------------
-    # Gold aggregations
-    # ---------------------------------------------------------------
-
-    gold_aggregations = DatabricksRunNowOperator(
-        task_id="gold_aggregations",
-        databricks_conn_id="databricks_default",
-        job_id=DATABRICKS_JOB_ID,
-        notebook_params={
-            "task": "gold",
-        },
-    )
-
-    # ---------------------------------------------------------------
-    # Data quality checks
-    # ---------------------------------------------------------------
-
-    data_quality_checks = DatabricksRunNowOperator(
-        task_id="data_quality_checks",
-        databricks_conn_id="databricks_default",
-        job_id=DATABRICKS_JOB_ID,
-        notebook_params={
-            "task": "qa",
-        },
-    )
-
-    # ---------------------------------------------------------------
-    # Pipeline dependency order
-    # ---------------------------------------------------------------
-
-    (
-        environment_setup
-        >> bronze_ingestion
-        >> silver_transform
-        >> gold_aggregations
-        >> data_quality_checks
-    )
