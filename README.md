@@ -264,7 +264,6 @@ This creates a clear separation of responsibilities:
 
 ## Airflow DAG Design
 
-```text
 environment_setup
         |
         v
@@ -274,8 +273,6 @@ run_databricks_pipeline
 Databricks Jobs API
         |
         v
-Flight Delay ETL Workflow
-```
 
 ![Airflow DAG](images/Airflow%20Build%20Logic.PNG)
 
