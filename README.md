@@ -236,7 +236,7 @@ Each stage executes only after its upstream dependency completes successfully.
 
 ### Databricks ETL Workflow
 
-![Databricks ETL Workflow](images/DataBricks%20ETL.PNG)
+![Databricks ETL Workflow](images/DataBricksETL.PNG)
 
 ### Databricks Job Timeline
 
