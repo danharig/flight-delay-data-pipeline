@@ -28,7 +28,6 @@ The project demonstrates the complete data lifecycle from raw source ingestion t
 
 # 🏗️ Architecture
 
-```text
                          BTS TranStats
                               |
                               v
@@ -72,7 +71,7 @@ The project demonstrates the complete data lifecycle from raw source ingestion t
                                      |
                                      v
                             Databricks Workspace
-```
+
 
 The architecture separates **storage, processing, orchestration, testing, deployment, validation, and visualization** into independent components.
 
@@ -105,7 +104,7 @@ Flight-performance data originates from the **U.S. Department of Transportation 
 
 Raw source data is stored in **Azure Data Lake Storage Gen2** before being ingested into the Databricks Bronze layer.
 
-```text
+
 BTS TranStats
       |
       v
@@ -113,7 +112,7 @@ Azure Data Lake Storage Gen2
       |
       v
 Bronze Delta Table
-```
+
 
 The Bronze layer preserves source-level flight data before downstream business transformations are applied.
 
@@ -161,7 +160,7 @@ Gold datasets provide metrics including:
 * Daily flight performance
 * Weekly flight performance
 
-```text
+
 Silver Flight Data
         |
         +------> Summary Metrics
@@ -170,8 +169,8 @@ Silver Flight Data
         |
         +------> Route Performance
         |
-        `------> Daily / Weekly Performance
-```
+        ------> Daily / Weekly Performance
+
 
 These Gold datasets serve as the primary reporting layer consumed by **Power BI**.
 
@@ -190,7 +189,6 @@ Validation includes checks for:
 * Invalid percentages and rates
 * Aggregation consistency
 
-```text
 Bronze
    |
    v
@@ -204,7 +202,7 @@ Data Quality Validation
    |
    v
 Analytics Ready
-```
+
 
 Placing validation at the end of the transformation workflow provides an automated checkpoint before the resulting data is consumed for reporting.
 
@@ -216,7 +214,7 @@ Azure Databricks provides the primary cloud compute and transformation environme
 
 The Databricks workflow manages the internal dependencies of the ETL pipeline:
 
-```text
+
 01_bronze_ingestion
         |
         v
@@ -227,7 +225,7 @@ The Databricks workflow manages the internal dependencies of the ETL pipeline:
         |
         v
 04_data_quality_checks
-```
+
 
 Each processing stage executes only after its upstream dependency completes successfully.
 
@@ -264,7 +262,7 @@ This creates a clear separation of responsibilities:
 
 ## Airflow DAG Design
 
-```text
+
 environment_setup
         |
         v
@@ -275,13 +273,13 @@ Databricks Jobs API
         |
         v
 Flight Delay ETL Workflow
-```
+
 
 ![Airflow DAG](images/Airflow%20Build%20Logic.PNG)
 
-The `environment_setup` task provides a clear starting point for the DAG before Airflow invokes the Databricks workflow.
+The environment_setup task provides a clear starting point for the DAG before Airflow invokes the Databricks workflow.
 
-The `run_databricks_pipeline` task uses Airflow's **DatabricksRunNowOperator** to trigger the existing Databricks job.
+The run_databricks_pipeline task uses Airflow's **DatabricksRunNowOperator** to trigger the existing Databricks job.
 
 This avoids duplicating Databricks workflow logic inside Airflow.
 
@@ -301,7 +299,7 @@ The optimized end-to-end ETL workflow completes in approximately:
 
 The Databricks execution includes:
 
-```text
+
 Bronze Ingestion
       ↓
 Silver Transformation
@@ -309,7 +307,7 @@ Silver Transformation
 Gold Aggregations
       ↓
 Data Quality Validation
-```
+
 
 The execution timeline demonstrates the performance of each individual processing stage.
 
@@ -323,7 +321,6 @@ For the current dataset and compute configuration, the pipeline provides a light
 
 The project implements **Continuous Integration and Continuous Deployment using GitHub Actions**.
 
-```text
 Local Development
        |
        v
@@ -343,7 +340,6 @@ GitHub Actions CD
        |
        v
 Databricks Workspace
-```
 
 ## Continuous Integration
 
@@ -371,7 +367,6 @@ Automated tests provide an additional validation layer for transformation logic.
 
 Testing is integrated into the project's CI process so code changes can be validated before deployment.
 
-```text
 Code Change
      |
      v
@@ -389,7 +384,6 @@ PASS    FAIL
  |       |
  v       v
 Deploy  Stop
-```
 
 This introduces software-engineering practices into the data pipeline rather than relying entirely on manual notebook execution.
 
@@ -444,23 +438,22 @@ The dashboard includes:
 
 # 📁 Repository Structure
 
-```text
 flight-delay-data-pipeline/
 |
 |-- .github/
-|   `-- workflows/
+|   -- workflows/
 |       |-- ci.yml
-|       `-- cd.yml
+|       -- cd.yml
 |
 |-- airflow/
-|   `-- dags/
-|       `-- flight_delay_pipeline.py
+|   -- dags/
+|       -- flight_delay_pipeline.py
 |
 |-- databricks/
 |   |-- 01_bronze_ingestion.py
 |   |-- 02_silver_transform.py
 |   |-- 03_gold_aggregations.py
-|   `-- 04_data_quality_checks.py
+|   -- 04_data_quality_checks.py
 |
 |-- images/
 |   |-- Airflow Build Logic.PNG
@@ -469,18 +462,18 @@ flight-delay-data-pipeline/
 |   |-- Flight Delay Pipeline Airflow Run Test.PNG
 |   |-- Job Run Repair.PNG
 |   |-- Order of Job Tasks.PNG
-|   `-- Power BI Dashboard Flight Delay Overview.PNG
+|   -- Power BI Dashboard Flight Delay Overview.PNG
 |
 |-- powerbi/
 |   |-- README.md
-|   `-- Flight-Delay.pbix
+|   -- Flight-Delay.pbix
 |
 |-- .gitignore
 |-- Dockerfile
 |-- docker-compose.yml
 |-- requirements.txt
-`-- README.md
-```
+-- README.md
+
 
 ---
 
@@ -488,15 +481,15 @@ flight-delay-data-pipeline/
 
 Credentials and environment-specific configuration are excluded from source control.
 
-The project's `.gitignore` prevents sensitive files such as:
+The project's .gitignore prevents sensitive files such as:
 
-```text
+text
 .env
 *.env
 .databrickscfg
 *.key
 *.pem
-```
+
 
 Credentials are handled separately across the architecture:
 
@@ -513,36 +506,36 @@ This prevents authentication secrets and access tokens from being committed to t
 
 Start the Dockerized Airflow environment:
 
-```bash
+bash
 docker compose up -d
-```
+
 
 Verify that the containers are running:
 
-```bash
+bash
 docker compose ps
-```
+
 
 Open the Airflow web interface and trigger:
 
-```text
+text
 flight_delay_pipeline
-```
+
 
 Airflow executes:
 
-```text
+text
 environment_setup
         |
         v
 run_databricks_pipeline
-```
 
-The `run_databricks_pipeline` task then triggers the complete **Flight Delay ETL Databricks workflow** through the Jobs API.
+
+The run_databricks_pipeline task then triggers the complete **Flight Delay ETL Databricks workflow** through the Jobs API.
 
 Databricks executes:
 
-```text
+text
 01_bronze_ingestion
         |
         v
@@ -553,13 +546,13 @@ Databricks executes:
         |
         v
 04_data_quality_checks
-```
+
 
 When finished, stop the local environment:
 
-```bash
+bash
 docker compose down
-```
+
 
 ---
 
@@ -567,7 +560,7 @@ docker compose down
 
 Pipeline changes follow a source-controlled development process:
 
-```text
+text
 Modify Pipeline Code
         |
         v
@@ -596,7 +589,7 @@ Databricks Workspace
         |
         v
 Airflow End-to-End Test
-```
+
 
 This separates **development, testing, deployment, orchestration, and execution** into distinct stages.
 
@@ -674,7 +667,7 @@ These enhancements would extend the current portfolio implementation toward a mo
 
 The goal of this project is to demonstrate the design and implementation of a **production-style cloud data engineering pipeline** spanning the complete analytical lifecycle:
 
-```text
+text
 Source Data
      ↓
 Cloud Storage
@@ -694,7 +687,7 @@ CI/CD
 Analytics
      ↓
 Business Intelligence
-```
+
 
 The project demonstrates how raw public transportation data can be transformed into a **validated, orchestrated, version-controlled, and analytics-ready solution** using modern cloud data engineering practices.
 
