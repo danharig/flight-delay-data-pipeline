@@ -230,7 +230,7 @@ The Databricks workflow manages the internal ETL task dependencies:
         |
         v
 04_data_quality_checks
-```
+
 
 Each stage executes only after its upstream dependency completes successfully.
 
