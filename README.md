@@ -272,9 +272,9 @@ run_databricks_pipeline
         v
 Databricks Jobs API
         |
-        v
+        
 
-![Airflow DAG](images/Airflow%20Build%20Logic.PNG)
+![Airflow DAG](images/Airflow%Build%Logic.PNG)
 
 The `environment_setup` task provides a clear starting point for the DAG before Airflow invokes the Databricks workflow.
 
