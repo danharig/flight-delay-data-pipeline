@@ -1,17 +1,17 @@
 from datetime import datetime
-
 import os
 
 from airflow import DAG
-from airflow.providers.databricks.operators.databricks import DatabricksRunNowOperator
-
+from airflow.operators.empty import EmptyOperator
+from airflow.providers.databricks.operators.databricks import (
+    DatabricksRunNowOperator,
+)
 
 # -------------------------------------------------------------------
 # Environment variables
 # -------------------------------------------------------------------
 
 DATABRICKS_JOB_ID = int(os.environ["DATABRICKS_JOB_ID"])
-
 
 # -------------------------------------------------------------------
 # DAG configuration
@@ -23,7 +23,6 @@ default_args = {
     "retries": 1,
 }
 
-
 with DAG(
     dag_id="flight_delay_pipeline",
     default_args=default_args,
@@ -33,6 +32,14 @@ with DAG(
     catchup=False,
     tags=["databricks", "flight-delay", "etl"],
 ) as dag:
+
+    # ---------------------------------------------------------------
+    # Environment setup / pipeline start
+    # ---------------------------------------------------------------
+
+    environment_setup = EmptyOperator(
+        task_id="environment_setup",
+    )
 
     # ---------------------------------------------------------------
     # Bronze ingestion
@@ -47,7 +54,6 @@ with DAG(
         },
     )
 
-
     # ---------------------------------------------------------------
     # Silver transformation
     # ---------------------------------------------------------------
@@ -60,7 +66,6 @@ with DAG(
             "task": "silver",
         },
     )
-
 
     # ---------------------------------------------------------------
     # Gold aggregations
@@ -75,7 +80,6 @@ with DAG(
         },
     )
 
-
     # ---------------------------------------------------------------
     # Data quality checks
     # ---------------------------------------------------------------
@@ -89,13 +93,13 @@ with DAG(
         },
     )
 
-
     # ---------------------------------------------------------------
     # Pipeline dependency order
     # ---------------------------------------------------------------
 
     (
-        bronze_ingestion
+        environment_setup
+        >> bronze_ingestion
         >> silver_transform
         >> gold_aggregations
         >> data_quality_checks
