@@ -1,6 +1,10 @@
-# CI/CD overwrite test successful
 # Databricks notebook source
-# 1. Confirm Azure Data Lake access
+# 1. Declare Variables and Confirm Azure Data Lake access
+
+CATALOG = "flight_delay_databricks"
+SCHEMA = "flight_delay"
+bronze_table = f"{CATALOG}.{SCHEMA}.bronze_flights"
+
 
 storage_path = "abfss://flight-data@flightdelay.dfs.core.windows.net/"
 
@@ -8,6 +12,7 @@ files = dbutils.fs.ls(storage_path)
 display(files)
 
 print("Azure storage connection verified.")
+print(bronze_table)
 
 # COMMAND ----------
 
@@ -125,7 +130,12 @@ display(dbutils.fs.ls(raw_dir))
 
 # COMMAND ----------
 
-# 5. Read the Azure raw file into the Bronze Spark DataFrame
+# 5. Read the Azure raw file into Bronze Spark DataFrame and Declare Bronze Catelog, Schema, Bronze_Table
+
+CATALOG = "flight_delay_databricks"
+SCHEMA = "flight_delay"
+
+BRONZE_TABLE = f"`{CATALOG}`.{SCHEMA}.bronze_flights"
 
 bronze_df = (
     spark.read
@@ -134,37 +144,15 @@ bronze_df = (
     .csv(raw_csv_path)
 )
 
-print(f"Bronze rows: {bronze_df.count():,}")
 print(f"Bronze columns: {len(bronze_df.columns)}")
 
-bronze_df.printSchema()
 display(bronze_df.limit(20))
 
 # COMMAND ----------
 
-#Create/Read Bronze Delta Table from the ADLS path.
-raw_csv_path = (
-    "abfss://flight-data@flightdelay.dfs.core.windows.net/"
-    "raw/transtats/2026/05/"
-    "On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2026_5.csv"
-)
-
-bronze_df = (
-    spark.read
-    .option("header", True)
-    .option("inferSchema", True)
-    .csv(raw_csv_path)
-)
-
-
-
-# COMMAND ----------
-
-# 6. Write the Bronze Delta table to the correct Unity Catalog location
-
-bronze_table = (
-    "flight_delay_databricks.flight_delay.bronze_flights"
-)
+# ---------------------------------------------------------
+# 6. Write Bronze Delta table
+# ---------------------------------------------------------
 
 (
     bronze_df.write
@@ -175,8 +163,12 @@ bronze_table = (
 )
 
 print(f"Bronze Delta table written successfully: {bronze_table}")
+print(f"Bronze rows: {bronze_df.count():,}")
+
 
 # COMMAND ----------
+
+# 7. Show Tables in DB
 
 spark.sql("""
 SHOW TABLES IN `flight_delay_databricks`.flight_delay
@@ -184,18 +176,6 @@ SHOW TABLES IN `flight_delay_databricks`.flight_delay
 
 # COMMAND ----------
 
-print(
-    spark.table(
-        "flight_delay_databricks.flight_delay.bronze_flights"
-    ).count()
-)
-
-# COMMAND ----------
-
-bronze_df = spark.table(
-    "`flight-delay_databricks`.flight_delay.bronze_flights"
-)
-
-# COMMAND ----------
+# 8. Display Raw Data Directory
 
 display(dbutils.fs.ls(raw_dir))
