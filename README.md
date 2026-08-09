@@ -438,22 +438,23 @@ The dashboard includes:
 
 # 📁 Repository Structure
 
+📁 Repository Structure
 flight-delay-data-pipeline/
 |
 |-- .github/
-|   -- workflows/
+|   `-- workflows/
 |       |-- ci.yml
-|       -- cd.yml
+|       `-- cd.yml
 |
 |-- airflow/
-|   -- dags/
-|       -- flight_delay_pipeline.py
+|   `-- dags/
+|       `-- flight_delay_pipeline.py
 |
 |-- databricks/
 |   |-- 01_bronze_ingestion.py
 |   |-- 02_silver_transform.py
 |   |-- 03_gold_aggregations.py
-|   -- 04_data_quality_checks.py
+|   `-- 04_data_quality_checks.py
 |
 |-- images/
 |   |-- Airflow Build Logic.PNG
@@ -462,17 +463,17 @@ flight-delay-data-pipeline/
 |   |-- Flight Delay Pipeline Airflow Run Test.PNG
 |   |-- Job Run Repair.PNG
 |   |-- Order of Job Tasks.PNG
-|   -- Power BI Dashboard Flight Delay Overview.PNG
+|   `-- Power BI Dashboard Flight Delay Overview.PNG
 |
 |-- powerbi/
 |   |-- README.md
-|   -- Flight-Delay.pbix
+|   `-- Flight-Delay.pbix
 |
 |-- .gitignore
 |-- Dockerfile
 |-- docker-compose.yml
 |-- requirements.txt
--- README.md
+`-- README.md
 
 
 ---
