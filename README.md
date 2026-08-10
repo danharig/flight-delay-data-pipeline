@@ -77,7 +77,7 @@ The pipeline moves flight data through several stages:
 
 Azure Databricks performs the primary transformation workload using PySpark and Delta tables.
 
-![Databricks ETL](images/DatabricksETL.PNG)
+![Databricks ETL](images/[DatabricksETL.PNG](https://github.com/danharig/flight_delay_data_pipeline/blob/a2ed4b6641eb15aedd64e3ac611d7b3ad0a9009f/images/DataBricksETL.PNG))
 
 The ETL process follows a medallion architecture:
 
