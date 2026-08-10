@@ -77,7 +77,7 @@ The pipeline moves flight data through several stages:
 
 Azure Databricks performs the primary transformation workload using PySpark and Delta tables.
 
-![Databricks ETL](./images/DatabricksETL.PNG)
+![Databricks ETL](images/DataBricksETL.PNG)
 
 The ETL process follows a medallion architecture:
 
