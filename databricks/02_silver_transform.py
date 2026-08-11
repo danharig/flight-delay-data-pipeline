@@ -5,7 +5,7 @@ import sys
 
 # Allow this notebook to import the shared transformation package
 sys.path.append(
-    "/Workspace/Users/email/flight_delay_cicd"
+    "/Workspace/flight_delay_cicd"
 )
 
 from src.silver_transformations import transform_silver
