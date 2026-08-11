@@ -13,11 +13,9 @@ display(files)
 
 print("Azure storage connection verified.")
 print(bronze_table)
-
-# COMMAND ----------
+----------------------------------
 
 # 2. Download and extract the May 2026 TranStats file on the Databricks driver
-
 
 import os
 import requests
@@ -68,8 +66,7 @@ with zipfile.ZipFile(zip_path, "r") as z:
     z.extractall(extract_dir)
 
 print(f"Extracted to: {extract_dir}")
-
-# COMMAND ----------
+----------------------------------
 
 # 3. Locate the extracted CSV
 
@@ -93,9 +90,7 @@ csv_path = csv_files[0]
 
 print("CSV located:")
 print(csv_path)
-
-
-# COMMAND ----------
+----------------------------------
 
 # 4. Save the raw CSV directly into Azure Data Lake
 
@@ -127,8 +122,7 @@ print("Raw CSV copied to Azure Data Lake:")
 print(raw_csv_path)
 
 display(dbutils.fs.ls(raw_dir))
-
-# COMMAND ----------
+----------------------------------
 
 # 5. Read the Azure raw file into Bronze Spark DataFrame and Declare Bronze Catelog, Schema, Bronze_Table
 
@@ -147,12 +141,9 @@ bronze_df = (
 print(f"Bronze columns: {len(bronze_df.columns)}")
 
 display(bronze_df.limit(20))
+----------------------------------
 
-# COMMAND ----------
-
-# ---------------------------------------------------------
 # 6. Write Bronze Delta table
-# ---------------------------------------------------------
 
 (
     bronze_df.write
@@ -164,18 +155,16 @@ display(bronze_df.limit(20))
 
 print(f"Bronze Delta table written successfully: {bronze_table}")
 print(f"Bronze rows: {bronze_df.count():,}")
-
-
-# COMMAND ----------
+----------------------------------
 
 # 7. Show Tables in DB
 
 spark.sql("""
 SHOW TABLES IN `flight_delay_databricks`.flight_delay
 """).show(truncate=False)
-
-# COMMAND ----------
+----------------------------------
 
 # 8. Display Raw Data Directory
 
 display(dbutils.fs.ls(raw_dir))
+----------------------------------
