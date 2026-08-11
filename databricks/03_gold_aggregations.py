@@ -17,14 +17,10 @@ GOLD_AIRPORT_TABLE = f"{CATALOG}.{SCHEMA}.gold_airport_performance"
 GOLD_ROUTE_TABLE = f"{CATALOG}.{SCHEMA}.gold_route_performance"
 GOLD_DAILY_TABLE = f"{CATALOG}.{SCHEMA}.gold_daily_performance"
 
-# COMMAND ----------
-
 # Read Silver table
 silver_df = spark.table(SILVER_TABLE)
 
 print(f"Silver rows: {silver_df.count():,}")
-
-# COMMAND ----------
 
 # =========================================================
 # GOLD 1: AIRLINE SUMMARY
@@ -80,9 +76,6 @@ display(gold_airline_df)
 
 print(f"Written: {GOLD_AIRLINE_TABLE}")
 
-# COMMAND ----------
-
-# DBTITLE 1,Cell 3
 # =========================================================
 # GOLD 2: AIRPORT PERFORMANCE
 # =========================================================
@@ -136,9 +129,6 @@ display(gold_airport_df)
 
 print(f"Written: {GOLD_AIRPORT_TABLE}")
 
-
-# COMMAND ----------
-
 # =========================================================
 # GOLD 3: ROUTE PERFORMANCE
 # =========================================================
@@ -181,7 +171,6 @@ gold_route_df = (
 
 display(gold_route_df)
 
-
 # ---------------------------------------------------------
 # Write Route Gold table
 # ---------------------------------------------------------
@@ -195,9 +184,6 @@ display(gold_route_df)
 )
 
 print(f"Written: {GOLD_ROUTE_TABLE}")
-
-
-# COMMAND ----------
 
 # =========================================================
 # GOLD 4: DAILY / WEEKLY PERFORMANCE
@@ -269,12 +255,9 @@ display(gold_daily_df)
 
 print(f"Written: {GOLD_DAILY_TABLE}")
 
-# COMMAND ----------
-
 for column in silver_df.columns:
     print(column)
 
-# COMMAND ----------
 
 gold_tables = {
     "Airline Summary": GOLD_AIRLINE_TABLE,
@@ -288,9 +271,6 @@ print("Gold layer successfully created.")
 for table_name, table_path in gold_tables.items():
     row_count = spark.table(table_path).count()
     print(f"{table_name}: {row_count:,} rows")
-
-
-# COMMAND ----------
 
 spark.sql(
     f"SHOW TABLES IN {CATALOG}.{SCHEMA}"
